@@ -1,0 +1,8 @@
+C:\Users\adam\Source\Repos\TestForDevoraLime\WarGame\bin\Debug\ConsoleApp1.exe.config
+C:\Users\adam\Source\Repos\TestForDevoraLime\WarGame\bin\Debug\ConsoleApp1.exe
+C:\Users\adam\Source\Repos\TestForDevoraLime\WarGame\bin\Debug\ConsoleApp1.pdb
+C:\Users\adam\Source\Repos\TestForDevoraLime\WarGame\obj\Debug\WarGame.csproj.AssemblyReference.cache
+C:\Users\adam\Source\Repos\TestForDevoraLime\WarGame\obj\Debug\WarGame.csproj.SuggestedBindingRedirects.cache
+C:\Users\adam\Source\Repos\TestForDevoraLime\WarGame\obj\Debug\WarGame.csproj.CoreCompileInputs.cache
+C:\Users\adam\Source\Repos\TestForDevoraLime\WarGame\obj\Debug\ConsoleApp1.exe
+C:\Users\adam\Source\Repos\TestForDevoraLime\WarGame\obj\Debug\ConsoleApp1.pdb
