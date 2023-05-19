@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
 namespace WarGame
@@ -14,17 +15,23 @@ namespace WarGame
         List<Soldier> battleField = new List<Soldier>();
         for (int i = 0; i < numberOfSoldiers; i++)
         {
-            battleField.Add(FromList[random.Next(FromList.Count)]);
+
+            var person= FromList[random.Next(FromList.Count)];
+                if (person.id==null)
+                {
+                person.id = battleField.Count + 1;
+                }
+            battleField.Add(person);
         }
-        return battleField;
+        return battleField; 
     }
     #endregion
         static void Main(string[] args)
         {
             #region Create the soldiers
-            Soldier Arrow = new Soldier( "Arrow", 100) ;
-            Soldier HorseRider = new Soldier("HorseRider", 150) ;
-            Soldier Swordsman  = new Soldier("Swordsman", 120) ;
+            Soldier Arrow = new Soldier(null, "Arrow", 100) ;
+            Soldier HorseRider = new Soldier(null,"HorseRider", 150) ;
+            Soldier Swordsman  = new Soldier(null,"Swordsman", 120) ;
             List<Soldier> Soldiers = new List<Soldier> { Arrow, HorseRider, Swordsman };
             #endregion
 
@@ -49,8 +56,9 @@ namespace WarGame
                 x =Console.ReadLine();
             }
             #endregion
-           var battleField= RandomGeneration(SoldierNum, Soldiers);
-         
+            var battleField= RandomGeneration(SoldierNum, Soldiers);
+            var battle = RandomGeneration(2, battleField);
+            
            
             Console.ReadKey();
         }
