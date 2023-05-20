@@ -40,6 +40,36 @@ namespace WarGame
             return battleField;
         }
         #endregion
+        #region LifeIncrease 
+        public static void Increise(Army entity,int max) 
+        {
+            if (entity.Soldier.lifePower > max)
+            {
+                entity.Soldier.lifePower += 10;
+                if (entity.Soldier.lifePower > max) entity.Soldier.lifePower = max;
+            }
+        }
+        public static void LifeIncrease(List<Army> healler ,List<Army> battleers)
+        {
+               var toHeal= healler.Where(x => x.Id != battleers.ElementAt(0).Id&&x.Id!=battleers.ElementAt(1).Id).ToList();
+            for (int i = 0; i < toHeal.Count; i++)
+            {
+                switch (toHeal[i].Soldier.name)
+                {
+                    case "Arrow":
+                        Increise(toHeal[i], 100);
+                        break;
+                    case "HorseRider":
+                        Increise(toHeal[i], 150);
+                        break;
+                    case "Swordsman":
+                        Increise(toHeal[i], 120);
+                        break;
+                }
+               
+            }
+        }
+        #endregion
         #region Battle
         public static void LifePowerCheck(Soldier defender, Soldier invader)
         {
@@ -171,6 +201,7 @@ namespace WarGame
                     }
                     //statement
                     Console.WriteLine($"{battleEntities[1].Soldier.name}({battleEntities[1].Soldier.lifePower}) Attacked {battleEntities[0].Soldier.name}({battleEntities[0].Soldier.lifePower})");
+                    LifeIncrease(battleField, battleEntities);
                     Battle(battleEntities[0], battleEntities[1], battleField);
                     System.Threading.Thread.Sleep(1000);
                 }
