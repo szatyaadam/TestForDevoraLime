@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\WarGame",
+    "\\WarGame\\Models"
   ],
-  "SelectedNode": "\\C:\\Users\\adam\\Source\\Repos\\TestForDevoraLime",
+  "SelectedNode": "\\WarGame\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
