@@ -142,9 +142,9 @@ namespace WarGame
 
             //reduce the warriors after the battle
 
-
             Console.WriteLine($"\t{invader.Id}.{invader.Soldier.name} LifePower={invader.Soldier.lifePower}" +
                               $"\n\t{defender.Id}.{defender.Soldier.name} LifePower={defender.Soldier.lifePower}");
+
             for (int i = 0; i < soldiers.Count; i++)
             {
                 if (soldiers.ElementAt(i).Soldier.lifePower <= 0)
@@ -154,7 +154,7 @@ namespace WarGame
                     Console.ResetColor();
                     soldiers.Remove(soldiers.ElementAt(i));
                 }
-              //  if (soldiers.Count < 1) break;
+                if (soldiers.Count < 1) break;
             }
             return soldiers;
         }
@@ -214,14 +214,21 @@ namespace WarGame
                     System.Threading.Thread.Sleep(1000);
                 }
                 //End of the battle
-                if (battleField.Count == 0)
+                if (battleField.Count == 0 || battleField[0].Soldier.lifePower==0)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"\t{battleField[0].Id}. {battleField[0].Soldier.name} Died");
                     Console.WriteLine($"Nobody stay alived");
+                    Console.ResetColor();
+
                 }
                 else
+                {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(battleField[0].Id +". "+battleField[0].Soldier.name + " Won the battle.");
-                Console.ResetColor();
+                    Console.WriteLine(battleField[0].Id +". "+battleField[0].Soldier.name + " Won the battle.");
+                    Console.ResetColor();
+                }
+
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
 
