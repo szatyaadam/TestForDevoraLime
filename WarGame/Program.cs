@@ -1,65 +1,188 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using WarGame.Models;
 
 namespace WarGame
 {
-
     public class Program
     {
-    #region Random soldiers to the battleField
-    public static List<Soldier> RandomGeneration(int numberOfSoldiers,List<Soldier> FromList )
-    {
-        var random = new Random();
-        List<Soldier> battleField = new List<Soldier>();
-        for (int i = 0; i < numberOfSoldiers; i++)
+        #region Random soldiers to the battleField
+        public static List<Army> RandomGeneration(int numberOfSoldiers)
         {
-
-            var person= FromList[random.Next(FromList.Count)];
-                if (person.id==null)
+            List<string> Soldiers = new List<string> { "Arrow", "HorseRider", "Swordsman" };
+            var random = new Random();
+            List<Army> battleField = new List<Army>();
+            for (int i = 0; i < numberOfSoldiers; i++)
+            {
+                var hero = Soldiers[random.Next(Soldiers.Count)];
+               
+                switch (hero)
                 {
-                person.id = battleField.Count + 1;
+                    case "Arrow":
+                     Soldier Arrow = new Soldier ( hero, 100 );
+                        Army Arrows = new Army(battleField.Count + 1, Arrow);
+                        battleField.Add(Arrows);
+                        break;
+                    case "HorseRider":
+                        Soldier HorseRider = new Soldier(hero, 150);
+                        Army HorseRiders = new Army(battleField.Count + 1, HorseRider);
+                        battleField.Add(HorseRiders);
+                        break;
+                    case "Swordsman":
+                        Soldier Swordsman = new Soldier(hero, 120);
+                        Army Swordsmans = new Army(battleField.Count + 1, Swordsman);
+                        battleField.Add(Swordsmans);
+                        break;
                 }
-            battleField.Add(person);
+            }
+            return battleField;
         }
-        return battleField; 
-    }
-    #endregion
+        #endregion
+        #region Battle
+        public static void LifePowerCheck(Soldier defender, Soldier invader)
+        {
+            
+            if ((invader.lifePower*0.15)>(invader.lifePower / 2)) invader.lifePower = 0;
+             else invader.lifePower = invader.lifePower / 2;
+           
+            if ((defender.lifePower * 0.15) > (defender.lifePower / 2))  defender.lifePower = 0;
+             else defender.lifePower = defender.lifePower / 2;
+        }
+        public static List<Army> Battle(Army defender, Army invader, List<Army> soldiers)
+        {
+            switch (invader.Soldier.name)
+            {
+                case "Arrow":
+                    switch (defender.Soldier.name)
+                    {
+                        case "Arrow":
+                            defender.Soldier.lifePower = 0;
+                            LifePowerCheck(defender.Soldier, invader.Soldier);
+                            break;
+                        case "HorseRider":
+                            defender.Soldier.lifePower = defender.Soldier.lifePower * 0.6;
+                            if ((invader.Soldier.lifePower * 0.15) > (invader.Soldier.lifePower / 2)) invader.Soldier.lifePower = 0;
+                            else invader.Soldier.lifePower = invader.Soldier.lifePower / 2;
+                            break;
+                        case "Swordsman":
+                            defender.Soldier.lifePower = 0;
+                            LifePowerCheck(defender.Soldier, invader.Soldier);
+                            break;
+                    }
+                    break;
+                case "HorseRider":
+                    switch (defender.Soldier.name)
+                    {
+                        case "Arrow":
+                            defender.Soldier.lifePower = 0;
+                            LifePowerCheck(defender.Soldier, invader.Soldier);
+                            break;
+                        case "HorseRider":
+                            defender.Soldier.lifePower = 0;
+                            LifePowerCheck(defender.Soldier, invader.Soldier);
+                            break;
+                        case "Swordsman":
+                            invader.Soldier.lifePower = 0;
+                            LifePowerCheck(defender.Soldier, invader.Soldier);
+                            break;
+                    }
+                    break;
+                case "Swordsman":
+                    switch (defender.Soldier.name)
+                    {
+                        case "Arrow":
+                            defender.Soldier.lifePower = 0;
+                            LifePowerCheck(defender.Soldier, invader.Soldier);
+
+                            break;
+                        case "HorseRider":
+                            LifePowerCheck(defender.Soldier, invader.Soldier);
+
+                            break;
+                        case "Swordsman":
+                            defender.Soldier.lifePower = 0;
+                            LifePowerCheck(defender.Soldier, invader.Soldier);
+
+                            break;
+                    }
+                    break;
+            }
+            //reduce the warriors after the battle
+            Console.WriteLine($"{invader.Soldier.name} LifePower={invader.Soldier.lifePower}" +
+                              $"\n{defender.Soldier.name} LifePower={defender.Soldier.lifePower}");
+            for (int i = 0; i < soldiers.Count; i++)
+            {
+                if (soldiers.ElementAt(i).Soldier.lifePower <= 0)
+                {
+                    Console.WriteLine(soldiers.ElementAt(i).Soldier.name+"Died");
+                    soldiers.Remove(soldiers.ElementAt(i));
+                }
+                if (soldiers.Count < 1) break;
+            }
+            return soldiers;
+        }
+        #endregion
         static void Main(string[] args)
         {
-            #region Create the soldiers
-            Soldier Arrow = new Soldier(null, "Arrow", 100) ;
-            Soldier HorseRider = new Soldier(null,"HorseRider", 150) ;
-            Soldier Swordsman  = new Soldier(null,"Swordsman", 120) ;
-            List<Soldier> Soldiers = new List<Soldier> { Arrow, HorseRider, Swordsman };
-            #endregion
-
+            var random = new Random();
             #region Data request and validation
             Console.WriteLine("Give the numbers of the soldiers :");
             int SoldierNum;
-            String x =Console.ReadLine();
-        
-            while (!Int32.TryParse(x, out SoldierNum) ||Convert.ToInt32(x)<=1)
+            String x = Console.ReadLine();
+
+            while (!Int32.TryParse(x, out SoldierNum) || Convert.ToInt32(x) <= 1)
             {
-               try
+                try
                 {
-                   if ( Convert.ToInt32(x) <= 1)
+                    if (Convert.ToInt32(x) <= 1)
                     {
                         Console.WriteLine("The minimum numbers of the soldiers is : 2");
                     }
                 }
                 catch
                 {
-                Console.WriteLine("Not a valid number, try again.");
+                    Console.WriteLine("Not a valid number, try again.");
                 }
-                x =Console.ReadLine();
+                x = Console.ReadLine();
             }
             #endregion
-            var battleField= RandomGeneration(SoldierNum, Soldiers);
-            var battle = RandomGeneration(2, battleField);
-            
-           
+            //Start the battle 
+            try
+            {
+                var battleField = RandomGeneration(SoldierNum);
+                while (battleField.Count > 1)
+                {
+                //Choose the battle pairs 
+                List<Army> battleEntities = new List<Army>();
+                    battleEntities.Add(battleField[random.Next(battleField.Count)]);
+                    //if the random pairs is the same players
+                    while (battleEntities.Count<2 )
+                    {
+                        if (battleEntities.Count<2)
+                        {
+                        battleEntities.Add(battleField[random.Next(battleField.Count)]);
+                        }
+                        if (battleEntities[0].Id == battleEntities[1].Id)
+                        {
+                            battleEntities.Remove(battleEntities[1]);
+                        }
+                    }
+                    //statement
+                    Console.WriteLine($"{battleEntities[1].Soldier.name}({battleEntities[1].Soldier.lifePower}) Attacked {battleEntities[0].Soldier.name}({battleEntities[0].Soldier.lifePower})");
+                    Battle(battleEntities[0], battleEntities[1], battleField);
+                    System.Threading.Thread.Sleep(1000);
+                }
+            //End of the battle
+                if (battleField.Count == 0)
+                {
+                    Console.WriteLine($"Nobody stay alived");
+                }
+                else Console.WriteLine(battleField[0].Soldier.name + " Won the battle.");
+            }
+            catch(Exception ex) { Console.WriteLine(ex.Message); }
+
             Console.ReadKey();
         }
     }
